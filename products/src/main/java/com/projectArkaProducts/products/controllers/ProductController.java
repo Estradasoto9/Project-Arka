@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -40,5 +40,23 @@ public class ProductController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // get products for name or description
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String termino) {
+        return productService.searchProductsByNameOrDescription(termino);
+    }
+
+    // get all products in order
+    @GetMapping("/sorted")
+    public List<Product> getAllProductsSorted() {
+        return productService.getAllProductsSorted();
+    }
+
+    // get product by price range
+    @GetMapping("/price")
+    public List<Product> getProductsByPriceRange(@RequestParam Double min, @RequestParam Double max) {
+        return productService.getProductsByPriceRange(min, max);
     }
 }

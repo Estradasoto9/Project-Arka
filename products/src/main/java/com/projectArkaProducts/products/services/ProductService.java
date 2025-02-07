@@ -46,4 +46,19 @@ public class ProductService {
     public void delete(Long id) {
         productRepository.deleteById(id);
     }
+
+    // get products for name or description
+    public List<Product> searchProductsByNameOrDescription(String term) {
+        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(term, term);
+    }
+
+    // get all products in order
+    public List<Product> getAllProductsSorted() {
+        return productRepository.findAllByOrderByNameAsc();
+    }
+
+    // get product by price range
+    public List<Product> getProductsByPriceRange(Double min, Double max) {
+        return productRepository.findByPriceBetween(min, max);
+    }
 }
