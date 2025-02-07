@@ -3,21 +3,7 @@ package com.projectArkaUsers.users.dtos;
 public class CreateUserDto {
 
     private Long id;
-    private String name;
-    private String email;
-    private String role;
 
-    public CreateUserDto() {
-    }
-
-    public CreateUserDto(Long id, String name, String email, String role) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-    }
-
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -48,6 +34,30 @@ public class CreateUserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private String name;
+    private String email;
+    private String role;
+    private String password;
+
+    public CreateUserDto() {
+    }
+
+    public CreateUserDto(Long id, String name, String email, String role, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.password = password;
     }
 
 }

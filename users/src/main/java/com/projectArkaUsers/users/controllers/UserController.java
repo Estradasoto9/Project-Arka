@@ -55,4 +55,16 @@ public class UserController {
         boolean deleted = userService.deleteUser(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    // get users by name
+    @GetMapping("/search")
+    public List<User> searchUsersByName(@RequestParam String name) {
+        return userService.findUsersByName(name);
+    }
+
+    // get all users sorted alphabetically
+    @GetMapping("/sorted")
+    public List<User> getAllUsersSorted() {
+        return userService.findAllUsersSorted();
+    }
 }

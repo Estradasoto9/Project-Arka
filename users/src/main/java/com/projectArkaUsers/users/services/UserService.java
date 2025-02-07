@@ -6,6 +6,7 @@ import com.projectArkaUsers.users.entities.User;
 import com.projectArkaUsers.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,16 +18,25 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // create new user
-    public User create(CreateUserDto userDto){
+    public User create(CreateUserDto userDto) {
         User newUser = new User();
         newUser.setName(userDto.getName());
         newUser.setEmail(userDto.getEmail());
         newUser.setRole(userDto.getRole());
-        newUser.setCreationDate(LocalDateTime.now()); //
+        newUser.setPassword(passwordEncoder.encode(userDto.getPassword())); // Encripta la contraseña
+        newUser.setCreationDate(LocalDateTime.now());
 
-        return userRepository.save(newUser); // Save User
+        User savedUser = userRepository.save(newUser); // Guarda el usuario
+
+        System.out.println("Usuario guardado: " + savedUser); // Debug
+
+        return savedUser; // Retorna el usuario completo
     }
+
 
     // get all users
     public List<User> getAllUsers(){
@@ -39,12 +49,14 @@ public class UserService {
     }
 
     // update use
-    public Optional<User> updateUser(Long id, UpdateUserDto userDto){
+    public Optional<User> updateUser(Long id, UpdateUserDto userDto) {
         return userRepository.findById(id).map(existingUser -> {
             if (userDto.getName() != null) existingUser.setName(userDto.getName());
             if (userDto.getEmail() != null) existingUser.setEmail(userDto.getEmail());
             if (userDto.getRole() != null) existingUser.setRole(userDto.getRole());
-
+            if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            }
             return userRepository.save(existingUser);
         });
     }
@@ -56,5 +68,15 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    // get users by name
+    public List<User> findUsersByName(String name) {
+        return userRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    // get all users sorted alphabetically
+    public List<User> findAllUsersSorted() {
+        return userRepository.findAllByOrderByNameAsc();
     }
 }
