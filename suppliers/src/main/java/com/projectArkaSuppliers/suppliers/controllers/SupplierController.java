@@ -1,8 +1,19 @@
 package com.projectArkaSuppliers.suppliers.controllers;
 
 
+import com.projectArkaSuppliers.suppliers.dtos.CreateSupplierDto;
+import com.projectArkaSuppliers.suppliers.dtos.UpdateSupplierDto;
+import com.projectArkaSuppliers.suppliers.entities.Supplier;
+import com.projectArkaSuppliers.suppliers.services.SupplierService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/suppliers")
@@ -13,8 +24,8 @@ public class SupplierController {
 
     // Crear un nuevo proveedor
     @PostMapping
-    public ResponseEntity<Supplier> createSupplier(@Valid @RequestBody CreateSuplierDto createSuplierDto) {
-        Supplier newSupplier = supplierService.create(createSuplierDto);
+    public ResponseEntity<Supplier> createSupplier(@Valid @RequestBody CreateSupplierDto createSupplierDto) {
+        Supplier newSupplier = supplierService.create(createSupplierDto);
         return new ResponseEntity<>(newSupplier, HttpStatus.CREATED);
     }
 
@@ -36,8 +47,8 @@ public class SupplierController {
     @PutMapping("/{id}")
     public ResponseEntity<Supplier> updateSupplier(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateSuplierDto updateSuplierDto) {
-        Supplier updatedSupplier = supplierService.update(id, updateSuplierDto);
+            @Valid @RequestBody UpdateSupplierDto updateSupplierDto) {
+        Supplier updatedSupplier = supplierService.update(id, updateSupplierDto);
         return new ResponseEntity<>(updatedSupplier, HttpStatus.OK);
     }
 

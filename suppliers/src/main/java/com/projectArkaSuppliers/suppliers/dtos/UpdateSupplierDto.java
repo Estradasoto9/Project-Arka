@@ -1,18 +1,16 @@
 package com.projectArkaSuppliers.suppliers.dtos;
 
-
 import jakarta.validation.constraints.Email;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
-@Data
+@Getter
+@Setter
 public class UpdateSupplierDto {
     private String name;
-
     private String description;
-
     private String address;
-
     private String phone;
 
     @Email

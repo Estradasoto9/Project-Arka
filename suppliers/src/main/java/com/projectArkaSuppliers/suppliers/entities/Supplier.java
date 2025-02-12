@@ -1,12 +1,17 @@
 package com.projectArkaSuppliers.suppliers.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -44,76 +49,25 @@ public class Supplier {
     @Column()
     private Date firstPurchase;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToOne(targetEntity = SupplierContact.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contact_id")
+    private SupplierContact contact;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "supplier")
+    @JsonManagedReference
+    private List<Store> stores;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "product_supplier",
+            joinColumns = @JoinColumn(name = "supplier_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setIsActive(boolean b) {
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public Date getFirstPurchase() {
-        return firstPurchase;
-    }
-
-    public void setFirstPurchase(Date firstPurchase) {
-        this.firstPurchase = firstPurchase;
-    }
-
 }
