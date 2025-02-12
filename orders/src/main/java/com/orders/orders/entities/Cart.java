@@ -1,5 +1,6 @@
 package com.orders.orders.entities;
 
+import com.projectArkaProducts.products.entities.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;

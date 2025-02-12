@@ -1,8 +1,10 @@
 package com.orders.orders.entities;
 
+import com.projectArkaProducts.products.entities.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -26,11 +28,11 @@ public class Order {
     @Column(nullable = false)
     private String status;  // Example: "PENDING", "PAID", "CANCELLED"
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "order_products",
-//            joinColumns = @JoinColumn(name = "order_id"),
-//            inverseJoinColumns = @JoinColumn(name = "product_id")
-//    )
-//    private List<Product> products;
+    @ManyToMany
+    @JoinTable(
+            name = "order_products",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 }
