@@ -2,8 +2,8 @@ package com.orders.orders.services;
 
 import com.orders.orders.entities.Order;
 import com.orders.orders.repositories.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,8 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+    @Autowired
+    private  OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;

@@ -1,21 +1,17 @@
 package com.projectArkaSuppliers.suppliers.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto {
     private String name;
     private String description;
-
-    public Long getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
-    }
 
     public BigDecimal getPurchasePrice() {
         return purchasePrice;
@@ -23,6 +19,14 @@ public class ProductDto {
 
     public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -33,12 +37,12 @@ public class ProductDto {
         this.description = description;
     }
 
-    public String getName() {
-        return name;
+    public Long getSupplierId() {
+        return supplierId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public BigDecimal getSalePrice() {

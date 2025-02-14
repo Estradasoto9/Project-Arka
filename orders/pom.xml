@@ -64,18 +64,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.projectArkaSuppliers</groupId>
-            <artifactId>suppliers</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-		<dependency>
-			<groupId>com.projectArkaProducts</groupId>
-			<artifactId>products</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 
 	<build>

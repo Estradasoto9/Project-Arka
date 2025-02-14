@@ -21,9 +21,6 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
     public Long getId() {
         return id;
     }
@@ -32,20 +29,20 @@ public class Product {
         this.id = id;
     }
 
-    public Set<Supplier> getSuppliers() {
-        return suppliers;
+    public String getName() {
+        return name;
     }
 
-    public void setSuppliers(Set<Supplier> suppliers) {
-        this.suppliers = suppliers;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getStock() {
-        return stock;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public BigDecimal getSalePrice() {
@@ -64,21 +61,24 @@ public class Product {
         this.purchasePrice = purchasePrice;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getStock() {
+        return stock;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
-    public String getName() {
-        return name;
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
     }
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal purchasePrice;

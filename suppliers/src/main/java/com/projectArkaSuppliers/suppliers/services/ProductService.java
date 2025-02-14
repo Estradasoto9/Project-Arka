@@ -18,12 +18,12 @@ public class ProductService {
     private ProductRepository productRepository;
 
     // Metodo para agregar un nuevo producto
-    public Product addProduct(ProductDto productDTO) {
+    public Product addProduct(ProductDto productDto) {
         Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPurchasePrice(productDTO.getPurchasePrice());
-        product.setSalePrice(productDTO.getSalePrice());
+        product.setName(productDto.getName());
+        product.setDescription(productDto.getDescription());
+        product.setPurchasePrice(productDto.getPurchasePrice());
+        product.setSalePrice(productDto.getSalePrice());
         product.setStock(0);
         return productRepository.save(product);
     }

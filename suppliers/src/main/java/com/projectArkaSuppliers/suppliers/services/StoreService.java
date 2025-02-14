@@ -20,7 +20,7 @@ public class StoreService {
     @Autowired
     private SupplierRepository supplierRepository; // Inyectar el repositorio del proveedor
 
-    public Store create(StoreDto dto, Long supplierId) {
+    public Store create(StoreDto storeDto, Long supplierId) {
         // Buscar el proveedor por ID
         Optional<Supplier> optionalSupplier = supplierRepository.findById(supplierId);
         if (optionalSupplier.isEmpty()) {
@@ -28,8 +28,8 @@ public class StoreService {
         }
 
         Store store = new Store();
-        store.setSupplier(optionalSupplier.get()); // Asignar el objeto Supplier
-        store.setName(dto.getName());
+        store.setSupplier(optionalSupplier.get());
+        store.setName(storeDto.getName());
 
         Address addressNew = new Address();
         addressNew.setCountry("Chile");

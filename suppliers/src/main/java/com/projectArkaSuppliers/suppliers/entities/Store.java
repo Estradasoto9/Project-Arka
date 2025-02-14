@@ -2,33 +2,55 @@ package com.projectArkaSuppliers.suppliers.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
-
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Entity
 public class Store {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   /* @OneToOne
-    private Address address;*/
-
-   /* @OneToMany(mappedBy = "store")
-    private List<Supplier> suppliers; */
+    @Column()
+    private  String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private Supplier supplier;
-
-    @Column()
-    private  String name;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")

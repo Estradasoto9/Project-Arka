@@ -1,38 +1,44 @@
 package com.orders.orders.entities;
 
-import com.projectArkaProducts.products.entities.Product;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long customerId;  // Reference to users-service
+    @NotNull(message = "El cliente es requerido")
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private String status;  // Example: "PENDING", "PAID", "CANCELLED"
+    @NotNull(message = "La orden es rquerida")
+    private LocalDateTime orderDate;
 
     @ManyToMany
     @JoinTable(
-            name = "order_products",
+            name = "order_product",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products;
+
+    // Constructors
+    public Order() {}
+
+    public Order(Client client, LocalDateTime orderDate, List<Product> products) {
+        this.client = client;
+        this.orderDate = orderDate;
+        this.products = products;
+    }
+
 }
