@@ -1,8 +1,10 @@
 package com.orders.orders.controllers;
 
+import com.orders.orders.dtos.OrderDTO;
 import com.orders.orders.entities.Order;
 import com.orders.orders.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -10,35 +12,36 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
-    @Autowired
-    private  OrderService orderService;
+    private final OrderService orderService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.createOrder(order));
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderDTO) {
+        Order order = orderService.createOrder(orderDTO);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Order order = orderService.getOrderById(id);
+        return ResponseEntity.ok(order);
     }
 
-    @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<Order>> getOrdersByCustomer(@PathVariable Long customerId) {
-        return ResponseEntity.ok(orderService.getOrdersByCustomer(customerId));
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/date-range")
-    public ResponseEntity<List<Order>> getOrdersByDateRange(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
-        return ResponseEntity.ok(orderService.getOrdersByDateRange(startDate, endDate));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.noContent().build();
     }
 }

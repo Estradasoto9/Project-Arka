@@ -1,9 +1,10 @@
 package com.orders.orders.services;
 
 import com.orders.orders.entities.Cart;
+import com.orders.orders.entities.Client;
+import com.orders.orders.entities.Product;
 import com.orders.orders.repositories.CartRepository;
-import com.projectArkaProducts.products.entities.Product;
-import com.projectArkaProducts.products.repositories.ProductRepository;
+import com.orders.orders.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,37 +15,32 @@ import java.util.Optional;
 public class CartService {
 
     @Autowired
-    private  CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public CartService(CartRepository cartRepository) {
+    public CartService(CartRepository cartRepository, ProductRepository productRepository) {
         this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
     }
 
-    public Optional<Cart> getCartByCustomer(Long customerId) {
-        return Optional.ofNullable(cartRepository.findByCustomerId(customerId));
+    public Optional<Cart> getCartByClient(Client client) {
+        return cartRepository.findByClient(client);
     }
 
     @Transactional
-    public Cart addProductToCart(Long customerId, Long productId) {
-        Cart cart = cartRepository.findByCustomerId(customerId);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCustomerId(customerId);
-        }
-
+    public Cart addProductToCart(Client client, Long productId) {
+        Cart cart = cartRepository.findByClient(client).orElse(new Cart());
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
         cart.getProducts().add(product);
         return cartRepository.save(cart);
     }
 
     @Transactional
-    public void clearCart(Long customerId) {
-        Cart cart = cartRepository.findByCustomerId(customerId);
+    public void clearCart(Client client) {
+        Cart cart = cartRepository.findByClient(client).orElse(null);
         if (cart != null) {
             cart.getProducts().clear();
             cartRepository.save(cart);
@@ -52,6 +48,6 @@ public class CartService {
     }
 
     public List<Cart> getAbandonedCarts() {
-        return cartRepository.findByProductsIsEmpty();
+        return cartRepository.findAllByProductsIsEmpty();
     }
 }
