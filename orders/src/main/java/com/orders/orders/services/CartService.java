@@ -2,6 +2,9 @@ package com.orders.orders.services;
 
 import com.orders.orders.entities.Cart;
 import com.orders.orders.repositories.CartRepository;
+import com.projectArkaProducts.products.entities.Product;
+import com.projectArkaProducts.products.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -10,7 +13,11 @@ import java.util.Optional;
 @Service
 public class CartService {
 
-    private final CartRepository cartRepository;
+    @Autowired
+    private  CartRepository cartRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public CartService(CartRepository cartRepository) {
         this.cartRepository = cartRepository;

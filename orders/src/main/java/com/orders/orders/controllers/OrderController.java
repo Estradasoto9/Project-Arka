@@ -2,6 +2,7 @@ package com.orders.orders.controllers;
 
 import com.orders.orders.entities.Order;
 import com.orders.orders.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -12,7 +13,8 @@ import java.util.Optional;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderService orderService;
+    @Autowired
+    private  OrderService orderService;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
