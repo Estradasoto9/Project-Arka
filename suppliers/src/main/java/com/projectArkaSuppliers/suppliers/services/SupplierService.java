@@ -7,11 +7,10 @@ import com.projectArkaSuppliers.suppliers.entities.Supplier;
 import com.projectArkaSuppliers.suppliers.entities.SupplierContact;
 import com.projectArkaSuppliers.suppliers.repositories.ProductRepository;
 import com.projectArkaSuppliers.suppliers.repositories.SupplierRepository;
-import jakarta.validation.Valid;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.BeanUtils;
-
 
 import java.util.Date;
 import java.util.List;
@@ -21,78 +20,80 @@ import java.util.Optional;
 public class SupplierService {
 
     @Autowired
-    SupplierRepository repository;
+    private SupplierRepository supplierRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
-    public List<Supplier> getAll(){
-        return repository.findAllByIsActive(true);
+    public List<Supplier> getAll() {
+        return supplierRepository.findAllByActive(true);
     }
 
-    public Supplier get(Long id){
-        return repository.findById(id).orElseThrow( /* Excepcion*/);
+    public Supplier get(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Proveedor no encontrado con ID: " + id));
     }
 
-    public Supplier create(@Valid CreateSupplierDto createSuplierDto) {
-        Supplier newSuplier = new Supplier();
-        newSuplier.setName(createSuplierDto.getName());
-        newSuplier.setIsActive(true);
-        newSuplier.setDescription(createSuplierDto.getDescription());
-        newSuplier.setEmail(createSuplierDto.getEmail());
-        newSuplier.setPhone(createSuplierDto.getPhone());
-        newSuplier.setWebsite(createSuplierDto.getWebSite());
-        newSuplier.setAddress(createSuplierDto.getAddress());
+    public Supplier create(CreateSupplierDto createSupplierDto) {
+        Supplier newSupplier = new Supplier();
+        newSupplier.setName(createSupplierDto.getName());
+        newSupplier.setActive(true);
+        newSupplier.setDescription(createSupplierDto.getDescription());
+        newSupplier.setEmail(createSupplierDto.getEmail());
+        newSupplier.setPhone(createSupplierDto.getPhone());
+        newSupplier.setWebSite(createSupplierDto.getWebSite());
+        newSupplier.setAddress(createSupplierDto.getAddress());
 
         /** INTSTACIANDO EL OBJETO**/
         SupplierContact supplierContactNew =  new SupplierContact();
-        BeanUtils.copyProperties(createSuplierDto.getContact(), supplierContactNew);
+        BeanUtils.copyProperties(createSupplierDto.getContact(), supplierContactNew);
 
-        newSuplier.setContact(supplierContactNew);
-        return repository.save(newSuplier);
+        newSupplier.setContact(supplierContactNew);
+        return supplierRepository.save(newSupplier);
     }
 
-    public Supplier update(Long id, @Valid UpdateSupplierDto updateSuplierDto) {
+    public Supplier update(Long id, UpdateSupplierDto updateSupplierDto) {
         Supplier existingSupplier = get(id);
 
-        if (updateSuplierDto.getName() != null) {
-            existingSupplier.setName(updateSuplierDto.getName());
+        if (updateSupplierDto.getName() != null) {
+            existingSupplier.setName(updateSupplierDto.getName());
         }
-        if (updateSuplierDto.getDescription() != null) {
-            existingSupplier.setDescription(updateSuplierDto.getDescription());
+        if (updateSupplierDto.getDescription() != null) {
+            existingSupplier.setDescription(updateSupplierDto.getDescription());
         }
-        if (updateSuplierDto.getEmail() != null) {
-            existingSupplier.setEmail(updateSuplierDto.getEmail());
+        if (updateSupplierDto.getEmail() != null) {
+            existingSupplier.setEmail(updateSupplierDto.getEmail());
         }
-        if (updateSuplierDto.getPhone() != null) {
-            existingSupplier.setPhone(updateSuplierDto.getPhone());
+        if (updateSupplierDto.getPhone() != null) {
+            existingSupplier.setPhone(updateSupplierDto.getPhone());
         }
-        if (updateSuplierDto.getWebSite() != null) {
-            existingSupplier.setWebsite(updateSuplierDto.getWebSite());
+        if (updateSupplierDto.getWebSite() != null) {
+            existingSupplier.setWebSite(updateSupplierDto.getWebSite());
         }
 
-        return repository.save(existingSupplier);
+        return supplierRepository.save(existingSupplier);
     }
 
-    public  String delete(Long id){
-        Supplier suplier = this.get(id);
+    public String delete(Long id) {
+        Supplier supplier =this.get(id);
 
-        if (suplier.getFirstPurchase() != null){
-            //Lanzar Exception indicado que no se pueden eliminar spluier con venta
+        if (supplier.getFirstPurchase() != null) {
+            throw new RuntimeException("No se puede eliminar un proveedor con ventas registradas.");
         }
-        repository.deleteById(id);
+
+        supplierRepository.deleteById(id);
         return "Se ha eliminado el proveedor";
     }
 
-    public String registrarVenta(Long id){
-        Supplier suplier = this.get(id);
-        suplier.setFirstPurchase(new Date());
-        repository.save(suplier);
-        return "Se ha comprado al proveedor";
+    public String registrarVenta(Long id) {
+        Supplier supplier = this.get(id);
+        supplier.setFirstPurchase(new Date());
+        supplierRepository.save(supplier);
+        return "Compra registrada para el proveedor.";
     }
 
     public Supplier addProductToSupplier(Long supplierId, Long productId) {
-        Optional<Supplier> supplierOptional = repository.findById(supplierId);
+        Optional<Supplier> supplierOptional = supplierRepository.findById(supplierId);
         Optional<Product> productOptional = productRepository.findById(productId);
 
         if (supplierOptional.isPresent() && productOptional.isPresent()) {
@@ -100,7 +101,7 @@ public class SupplierService {
             Product product = productOptional.get();
 
             supplier.getProducts().add(product);
-            return repository.save(supplier);
+            return supplierRepository.save(supplier);
         } else {
             throw new RuntimeException("Proveedor o producto no encontrado");
         }

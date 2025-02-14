@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +28,13 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+
     public Order createOrder(OrderDTO orderDTO) {
         Client client = clientRepository.findById(orderDTO.getClient().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
+    @Autowired
+    private  OrderRepository orderRepository;
 
         List<Product> products = productRepository.findAllById(orderDTO.getProductIds());
         if (products.isEmpty()) {

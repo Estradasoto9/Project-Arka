@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+
 @Table(name = "orders")
 public class Order {
     @Id
@@ -98,6 +98,24 @@ public class Order {
     )
     private List<Product> products;
 
+
+    public Order() {}
+
+    @NotNull(message = "El cliente es requerido")
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @NotNull(message = "La orden es rquerida")
+    private LocalDateTime orderDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "order_product",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 
     public Order() {}
 

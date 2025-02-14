@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    List<Supplier> findAllByIsActive(boolean active);
+    List<Supplier> findAllByActive(boolean active);
 }

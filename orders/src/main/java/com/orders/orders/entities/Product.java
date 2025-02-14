@@ -19,6 +19,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @NotBlank(message = "El nombre del producto es requerido")
     @Size(min = 2, max = 120, message = "El nombre del producto debe tener entre 2 y 120 caracteres")
     private String name;
@@ -31,6 +32,13 @@ public class Product {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @NotBlank(message = "Product name is required")
+    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
+    private String name;
+
+    @NotNull(message = "Price is required")
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -129,4 +137,18 @@ public class Product {
         this.supplier = supplier;
     }
 
+}
+
+    @ManyToMany(mappedBy = "products")
+    private List<Cart> carts;
+
+    // Constructors
+    public Product() {
+    }
+
+    public Product(String name, BigDecimal price, Category category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
 }

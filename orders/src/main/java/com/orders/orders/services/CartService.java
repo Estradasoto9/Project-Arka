@@ -4,7 +4,12 @@ import com.orders.orders.entities.Cart;
 import com.orders.orders.entities.Client;
 import com.orders.orders.entities.Product;
 import com.orders.orders.repositories.CartRepository;
+
 import com.orders.orders.repositories.ProductRepository;
+
+import com.projectArkaProducts.products.entities.Product;
+import com.projectArkaProducts.products.repositories.ProductRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +20,14 @@ import java.util.Optional;
 public class CartService {
 
     @Autowired
+
     private final CartRepository cartRepository;
+  
+    private  CartRepository cartRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @Autowired
     private final ProductRepository productRepository;
