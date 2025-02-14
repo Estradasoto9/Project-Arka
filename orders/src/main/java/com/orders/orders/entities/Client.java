@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Entity
@@ -21,6 +23,12 @@ public class Client {
     @NotBlank(message = "El nombre es requerido")
     @Size(min = 2, max = 120, message = "El nombre debe tener entre 2 y 120 caracteres")
     private String name;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @NotBlank(message = "El correo es requerido")
     @Email(message = "formato invalido del correo")
